@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - test
-
 jobs:
     test-yaml-reader:
         runs-on: ubuntu-latest
