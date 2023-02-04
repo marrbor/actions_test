@@ -20,19 +20,39 @@ jobs:
         id: increment_build_number
         run: |
           echo "next_version=$(echo "${{ steps.yaml-data.outputs.data }}" |awk 'BEGIN{FS="+"}{printf "%s+%d",$1,$2+1}')" >>$GITHUB_ENV
-      - name: update pubspec.yaml
-        id: update_pubspec_yaml
-        uses: fjogeleit/yaml-update-action@main
-        with:
-            valueFile: 'pubspec.yaml'
-            propertyPath: 'version'
-            value: ${{ env.next_version }}
-            commitChange: true
-            message: 'update build number'
-            # ビルド番号更新したら develop にバックポートを依頼する
-            createPR: true
-            title: 'ビルド番号更新'
-            description: 'ビルド番号を ${{ env.next_version }} に更新'
-            targetBranch: develop
-            masterBranchName: main
-            branch: test
+#      - name: update pubspec.yaml
+#        id: update_pubspec_yaml
+#        uses: fjogeleit/yaml-update-action@main
+#        with:
+#            valueFile: 'pubspec.yaml'
+#            propertyPath: 'version'
+#            value: ${{ env.next_version }}
+#            commitChange: true
+#            message: 'update build number'
+#            # ビルド番号更新したら develop にバックポートを依頼する
+#            createPR: true
+#            title: 'ビルド番号更新'
+#            description: 'ビルド番号を ${{ env.next_version }} に更新'
+#            targetBranch: develop
+#            masterBranchName: main
+#            branch: test
+       - name: update xxx
+         id: update_xxx
+         uses: mikefarah/yq@master
+         with:
+             cmd: yq -i '.version = "${{ env.next_version }}"' 'pubspec.yaml'
+       - name: commit change
+         id: commit_change
+         uses: stefanzweifel/git-auto-commit-action@v4
+         with:
+             commit_message: 'update build number to ${{ env.next_version }}'
+             branch: test
+             tagging_message: '${{ env.next_version }}'
+      - name: Create Pull Request
+        id: create_pull_request
+        uses: peter-evans/create-pull-request@v4
+        base: test
+        branch: develop
+        delete-branch: false
+        title: 'ビルド番号更新'
+        body: 'ビルド番号を ${{ env.next_version }} に更新'
