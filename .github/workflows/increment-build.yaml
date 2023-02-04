@@ -18,10 +18,9 @@ jobs:
             key-path: '["version"]' # Access the runs key then the using key and retuns the value.
       - name: increment build number
         id: increment_build_number
-        run: |
-          echo "next_version=$(echo "${{ steps.yaml-data.outputs.data }}" |awk 'BEGIN{FS="+"}{printf "%s+%d",$1,$2+1}')" >>$GITHUB_ENV
-      - name: update xxx
-        id: update_xxx
+        run: echo "next_version=$(echo "${{ steps.yaml-data.outputs.data }}" |awk 'BEGIN{FS="+"}{printf "%s+%d",$1,$2+1}')" >>$GITHUB_ENV
+      - name: update build number
+        id: update_build_number
         uses: mikefarah/yq@master
         with:
             cmd: yq -i '.version = "${{ env.next_version }}"' 'pubspec.yaml'
