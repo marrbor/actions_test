@@ -18,7 +18,7 @@ jobs:
             key-path: '["version"]' # Access the runs key then the using key and retuns the value.
       - name: generate release name
         id: generate_release_name
-        run: echo "version=$(echo "${{ steps.get_version_number.outputs.data }}" |awk 'BEGIN{FS="+"}{print $1}'" >>$GITHUB_ENV
+        run: echo "version=$(echo "${{ steps.get_version_number.outputs.data }}" |awk 'BEGIN{FS="+"}{print $1}')" >>$GITHUB_ENV
       - name: release
         id: release
         uses: ncipollo/release-action@v1
