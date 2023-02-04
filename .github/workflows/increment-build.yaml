@@ -32,7 +32,7 @@ jobs:
             # ビルド番号更新したら develop にバックポートを依頼する
             createPR: true
             title: 'ビルド番号更新'
-            descripsion: 'ビルド番号を ${{ env.next_version }} に更新'
+            description: 'ビルド番号を ${{ env.next_version }} に更新'
             targetBranch: develop
             masterBranchName: main
             branch: test
